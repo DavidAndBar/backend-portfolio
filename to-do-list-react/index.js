@@ -15,12 +15,26 @@ router.get('/',(request, response)=>{
 router.post('/register', async (req, res) => {
     try {
         const email = req.body.email || "";
-        
+        const newUser = {...req.body,
+            lists: [
+                {
+                    id: "list1",
+                    list: [
+                        {
+                        "id": 1,
+                        "name": "Task 1",
+                        "completed": false,
+                        "dueDate": "2024-12-01"
+                        }],
+                    title: "List 1"
+                }
+            ]
+        };
         if (!!email){
             Users.findOne({"email": email})
             .then(async result => {
                 if (!!!result) {
-                    const user = new Users(req.body);                    
+                    const user = new Users(newUser);                    
                     const salt = await bcrypt.genSalt(parseInt(process.env.HASH_TODO));
                     const password = await bcrypt.hash(req.body.password, salt);
                     user.password = password;
@@ -82,5 +96,66 @@ router.post('/check-token', async (req, res) => {
         res.json({validToken: false})
     }
 })
+
+router.get('/:username', (req, res) => {
+    const username = req.params.username;
+    try {
+        Users.findOne({username: username}).
+        then(result => {
+            res.json({lists: result.lists})
+        })
+        .catch(error => res.json({message: error}))
+    } catch {
+        res.json(error => res.json({message: error}))
+    }
+})
+
+router.put('/:username/:listId', (req, res) => {
+    const username = req.params.username;
+    const id = req.params.listId;
+    
+    try {
+        Users.findOne({username: username}).
+        then(result => {
+            const newList = req.body;
+            const oldList = result.lists.filter( (item) => item.id == id);
+            const updatedLists = result.lists;
+            updatedLists[result.lists.indexOf(oldList[0])] = newList;
+            
+
+            Users.updateOne({username: username}, {lists: updatedLists}).then(
+                upd => console.log(`${username}'s lists updated!`)
+            )
+            res.json({lists: result.lists})
+        })
+        .catch(error => res.json({message: error}))
+    } catch {
+        res.json({message: false})
+    }
+})
+
+//Create new list
+router.post('/:username', (req, res) => {
+    const username = req.params.username;
+    const newList = req.body;
+    
+    try {
+
+        Users.findOne({username: username})
+        .then(result => {
+            const oldLists = result.lists           
+            oldLists.push(newList)
+            Users.updateOne({username: username}, {lists: oldLists}).then(
+                upd => console.log(`${newList.title} list added to ${username}!`)
+            )
+            res.json({message: true})
+        })
+        .catch(error => res.json({message: error}));
+        
+    } catch {
+        res.json({message: false})
+    }
+});
+
 
 module.exports = router;

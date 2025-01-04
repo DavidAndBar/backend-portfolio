@@ -26,6 +26,9 @@ const userSchema = new Schema({
         required: true,
         minlength: 6 // minlength and min have the same function, they states what is the min length of the property. But
                      // you can still add information below min value using "min", minlength is more restrictive. 
+    },
+    lists: {
+        type: Object,
     }
 })
 
