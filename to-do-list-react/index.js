@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('./databases/conexion_to_do')
 const Users = require('./models/toDo/users');
+require('dotenv').config()
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
