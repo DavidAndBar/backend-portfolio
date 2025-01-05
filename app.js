@@ -16,6 +16,11 @@ var corsOptions = {
 // Define the url used with a router inside backtest file. - These are middlewares.
 app.use(express.json()) // This middleware is to accept json in the body request.
 
+app.get('/', (req, res) => {
+    res.json({message: "Welcome to the backend!"})
+  });
+  
+
 app.use('/to-do-list',cors(corsOptions),index);
 
 // Executes the back
