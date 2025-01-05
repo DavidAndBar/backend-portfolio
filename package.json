@@ -4,7 +4,7 @@
   "description": "This folder holds the backend logic for different projects.",
   "main": "app.js",
   "scripts": {
-    "start": "node --env-file=.env app.js",
+    "start": "node --env-file-if-exists=.env app.js",
     "dev": "nodemon --env-file=.env app.js",
     "test": "jest --passWithNoTests"
   },
