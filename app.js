@@ -3,7 +3,7 @@ const cors = require('cors')
 const index = require('./to-do-list-react/index');
 require('dotenv').config()
 
-const port = process.env.PORT_TODO || 8080;
+const port = process.env.PORT_TODO || 443;
 
 const app = express();
 
