@@ -3,7 +3,7 @@ const cors = require('cors')
 const index = require('./to-do-list-react/index');
 require('dotenv').config()
 
-const port = process.env.PORT_TODO || 3000;
+const port = process.env.PORT_TODO || 8080;
 
 const app = express();
 
@@ -16,10 +16,9 @@ var corsOptions = {
 // Define the url used with a router inside backtest file. - These are middlewares.
 app.use(express.json()) // This middleware is to accept json in the body request.
 
-app.get('/', (req, res) => {
+app.get('/', cors(corsOptions), (req, res) => {
     res.json({message: "Welcome to the backend!"})
   });
-  
 
 app.use('/to-do-list',cors(corsOptions),index);
 
