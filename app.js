@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const index = require('./to-do-list-react/index');
-require('dotenv').config()
+require('@dotenvx/dotenvx').config()
 
 const port = process.env.PORT_TODO || 443;
 
