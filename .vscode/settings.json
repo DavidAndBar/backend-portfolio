@@ -3,6 +3,6 @@
         "node_modules{,/**}",
         ".vscode{,/**}"
     ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/df63a1f8-3297-4b6f-aac0-d578f873990a/resourceGroups/to-do-list/providers/Microsoft.Web/sites/tdl-db",
+    "appService.defaultWebAppToDeploy": "/subscriptions/df63a1f8-3297-4b6f-aac0-d578f873990a/resourceGroups/to-do-list/providers/Microsoft.Web/sites/tdl-react",
     "appService.deploySubpath": "."
 }

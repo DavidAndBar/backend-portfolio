@@ -16,6 +16,7 @@ router.get('/',(request, response)=>{
 router.post('/register', async (req, res) => {
     try {
         const email = req.body.email || "";
+        const username = req.body.username || "";
         const newUser = {...req.body,
             lists: [
                 {
@@ -33,26 +34,34 @@ router.post('/register', async (req, res) => {
         };
         if (!!email){
             Users.findOne({"email": email})
-            .then(async result => {
+            .then(result => {
                 if (!!!result) {
-                    const user = new Users(newUser);                    
-                    const salt = await bcrypt.genSalt(parseInt(process.env.HASH_TODO));
-                    const password = await bcrypt.hash(req.body.password, salt);
-                    user.password = password;
-                    user.save()
-                    .then(user => res.json({message: true}))
-                    .catch(error => res.json(error));
+                    Users.findOne({"username": username})
+                    .then( async userfound => {
+                        if (!!!userfound) {
+                            const user = new Users(newUser);
+                            const salt = await bcrypt.genSalt(parseInt(process.env.HASH_TODO));
+                            const password = await bcrypt.hash(req.body.password, salt);
+                            user.password = password;
+                            user.save()
+                            .then(user => res.json({message: true}))
+                            .catch(error => res.json(error));
+                        }
+                        else {
+                            res.json({message: false, failed: "username"});        
+                        }
+                    })
                 }
                 else {
-                    res.json({message: false});
+                    res.json({message: false, failed: "email"});
                 }
             })
             .catch(error => res.json({error: error}));
         } else {
-            res.json({message: false})
+            res.json({message: false, failed: "email"})
         }
     } catch {
-        res.json({message: false})
+        res.json({message: false, failed: "database"})
     }
 })
 
@@ -157,6 +166,5 @@ router.post('/:username', (req, res) => {
         res.json({message: false})
     }
 });
-
 
 module.exports = router;
