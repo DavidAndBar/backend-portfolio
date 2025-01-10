@@ -116,9 +116,32 @@ router.get('/:username', (req, res) => {
         })
         .catch(error => res.json({message: error}))
     } catch {
-        res.json(error => res.json({message: error}))
+        res.json({message: false})
     }
 })
+
+/* Delete lists */
+
+router.put('/delete/list/:username/:id', (req, res) => {
+    const username = req.params.username;
+    const id = req.params.id;
+    try {
+        Users.findOne({username: username})
+        .then(result => {
+            const newLists = Object.values(result.lists).filter( item => item.id !== id);
+            console.log(newLists);
+            Users.updateOne({username: username}, {lists: newLists}).then(
+                upd => {console.log(`${username}'s lists updated! (delete)`)
+                res.json({message: true})}
+            )
+        })
+    }
+    catch {
+        res.json({message: false})
+    }
+
+})
+
 
 router.put('/:username/:listId', (req, res) => {
     const username = req.params.username;
