@@ -71,7 +71,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const user = req.body;
     try {
-        Users.findOne({email: user.email})
+        Users.findOne({email: user.email.toLowerCase()})
         .then(result => 
             {if (result != null) {
                 const username = result.username;
