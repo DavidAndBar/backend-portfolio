@@ -15,9 +15,12 @@ router.get('/',(request, response)=>{
 //Register page
 router.post('/register', async (req, res) => {
     try {
-        const email = req.body.email || "";
-        const username = req.body.username || "";
-        const newUser = {...req.body,
+        const email = req.body.email.toLowerCase() || "";
+        const username = req.body.username.toLowerCase() || "";
+        const newUser = {email: email,
+            name: req.body.name,
+            username: username,
+            password: req.body.password,
             lists: [
                 {
                     id: "list1",
